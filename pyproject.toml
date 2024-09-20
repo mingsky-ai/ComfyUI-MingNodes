@@ -1,0 +1,13 @@
+[project]
+name = "ComfyUI_MingNodes_Mingsky"
+description = "Nodes: ConvertGrayChannelNode, AdjustBrightnessContrastSaturationNode, BaiduTranslateNode."
+version = "1.0"
+license = { file = "LICENSE" }
+
+[project.urls]
+Repository = "https://github.com/mingsky-ai/ComfyUI-MingNodes"
+
+[tool.comfy]
+PublisherId = "mingsky"
+DisplayName = "ComfyUI-MingNodes"
+Icon = ""

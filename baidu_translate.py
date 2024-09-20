@@ -53,9 +53,7 @@ class BaiduTranslateNode:
         payload = {'appid': appid, 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
 
         r = requests.post(url, params=payload, headers=headers)
-        print("=========", r)
         result = r.json()
         txt = result['trans_result'][0]['dst']
-        print(txt)
 
         return (txt,)

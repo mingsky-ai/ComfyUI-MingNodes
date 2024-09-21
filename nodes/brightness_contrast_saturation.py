@@ -12,7 +12,8 @@ def adjust_brightness_contrast_saturation(image, brightness, contrast, saturatio
     else:
         br = 0
     adjusted = cv2.addWeighted(image, 1, blank, 0.5, br)
-    adjusted2 = cv2.convertScaleAbs(adjusted, alpha=contrast)
+    beta = np.mean(adjusted) * (1 - contrast)
+    adjusted2 = cv2.convertScaleAbs(adjusted, alpha=contrast, beta=beta)
     hsv = cv2.cvtColor(adjusted2, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)

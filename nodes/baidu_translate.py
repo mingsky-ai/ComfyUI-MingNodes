@@ -1,15 +1,10 @@
 import requests
 import random
 from hashlib import md5
-import base64
 
 
 def make_md5(s, encoding='utf-8'):
     return md5(s.encode(encoding)).hexdigest()
-
-
-def decrypt(encrypted_message):
-    return base64.b64decode(encrypted_message).decode('utf-8')
 
 
 class BaiduTranslateNode:
@@ -33,6 +28,8 @@ class BaiduTranslateNode:
                                      'cht'
                                  ], {"default": "en"}),
                 "text": ("STRING", {"multiline": True, "placeholder": "Input prompt"}),
+                "baidu_appid": ("STRING", {"multiline": False, "placeholder": "Input AppId"}),
+                "baidu_appkey": ("STRING", {"multiline": False, "placeholder": "Input AppKey"}),
             }
         }
 
@@ -42,9 +39,9 @@ class BaiduTranslateNode:
     RETURN_NAMES = ("text",)
     FUNCTION = "baidu_translate"
 
-    def baidu_translate(self, from_translate, to_translate, text):
-        appid = "MjAyNDA5MjEwMDIxNTYxMzI="
-        appkey = "cEdNSno5aU5wVUpfbjEweGJwWXM="
+    def baidu_translate(self, from_translate, to_translate, text, baidu_appid, baidu_appkey):
+        appid = baidu_appid
+        appkey = baidu_appkey
         from_lang = from_translate
         to_lang = to_translate
         endpoint = 'https://api.fanyi.baidu.com'
@@ -52,10 +49,10 @@ class BaiduTranslateNode:
         url = endpoint + path
         query = text
         salt = random.randint(32768, 65536)
-        sign = make_md5(decrypt(appid) + query + str(salt) + decrypt(appkey))
+        sign = make_md5(appid + query + str(salt) + appkey)
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        payload = {'appid': decrypt(appid), 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
+        payload = {'appid': appid, 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
 
         r = requests.post(url, params=payload, headers=headers)
         result = r.json()

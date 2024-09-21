@@ -42,8 +42,8 @@ class BaiduTranslateNode:
     FUNCTION = "baidu_translate"
 
     def baidu_translate(self, from_translate, to_translate, text):
-        appid = "b'MjAyNDA5MjEwMDIxNTYxMzI='"
-        appkey = "b'cEdNSno5aU5wVUpfbjEweGJwWXM='"
+        appid = "MjAyNDA5MjEwMDIxNTYxMzI="
+        appkey = "cEdNSno5aU5wVUpfbjEweGJwWXM="
         from_lang = from_translate
         to_lang = to_translate
         endpoint = 'https://api.fanyi.baidu.com'

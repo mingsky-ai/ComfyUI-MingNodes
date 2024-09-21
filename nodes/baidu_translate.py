@@ -55,10 +55,9 @@ class BaiduTranslateNode:
         sign = make_md5(decrypt(appid) + query + str(salt) + decrypt(appkey))
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        payload = {'appid': appid, 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
+        payload = {'appid': decrypt(appid), 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
 
         r = requests.post(url, params=payload, headers=headers)
-        print("=======", r)
         result = r.json()
         txt = result['trans_result'][0]['dst']
 

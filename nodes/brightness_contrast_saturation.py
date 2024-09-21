@@ -5,8 +5,8 @@ import math
 
 
 def adjust_brightness_contrast_saturation(image, brightness, contrast, saturation):
-
-    adjusted = cv2.addWeighted(image, contrast, contrast*100, 0.5, (brightness-1)*100)
+    blank = np.zeros_like(image)
+    adjusted = cv2.addWeighted(image, contrast*100, blank, 0.5, (brightness-1)*100)
     hsv = cv2.cvtColor(adjusted, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)

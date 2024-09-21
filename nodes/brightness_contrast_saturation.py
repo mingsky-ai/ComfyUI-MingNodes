@@ -5,16 +5,8 @@ import math
 
 
 def adjust_brightness_contrast_saturation(image, brightness, contrast, saturation):
-    if brightness > 1:
-        br = math.log10(brightness)*250
-    elif brightness < 1:
-        br = math.log10(brightness)*200
-        if br < -120:
-            br = -120
-    else:
-        br = 0
 
-    adjusted = cv2.convertScaleAbs(image, alpha=contrast, beta=br)
+    adjusted = cv2.addWeighted(image, contrast, contrast*100, 0.5, (brightness-1)*100)
     hsv = cv2.cvtColor(adjusted, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)

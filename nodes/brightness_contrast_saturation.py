@@ -1,10 +1,18 @@
 import cv2
 import numpy as np
 import torch
+import math
 
 
 def adjust_brightness_contrast_saturation(image, brightness, contrast, saturation):
-    adjusted = cv2.convertScaleAbs(image, alpha = contrast, beta = brightness*60)
+    if brightness > 1:
+        br = math.log10(brightness)*250
+    elif brightness < 1:
+        br = math.log10(brightness)*100
+    else:
+        br = 0
+
+    adjusted = cv2.convertScaleAbs(image, alpha=contrast, beta=br)
     hsv = cv2.cvtColor(adjusted, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)
@@ -19,16 +27,16 @@ class AdjustBrightnessContrastSaturationNode:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "brightness": ("FLOAT", {"default": 0, "min": -3.0, "max": 3.0, "step": 0.01}),
-                "contrast": ("FLOAT", {"default": 1.0, "min": 0, "max": 3.0, "step": 0.01}),
-                "saturation": ("FLOAT", {"default": 1.0, "min": 0, "max": 3.0, "step": 0.01}),
+                "brightness": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
+                "contrast": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
+                "saturation": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
             }
         }
 
     CATEGORY = "MingNode/Image Process"
 
-    RETURN_TYPES = ("IMAGE", )
-    RETURN_NAMES = ("image", )
+    RETURN_TYPES = ("IMAGE",)
+    RETURN_NAMES = ("image",)
     FUNCTION = "brightness_contrast_saturation"
 
     def brightness_contrast_saturation(self, image, brightness, contrast, saturation):

@@ -22,13 +22,13 @@ class BaiduTranslateNode:
                     ],
                     {"default": "auto"},
                 ),
-                "baidu_appid": ("STRING", {"multiline": False, "placeholder": "Input AppId"}),
-                "baidu_appkey": ("STRING", {"multiline": False, "placeholder": "Input AppKey"}),
                 "to_translate": ([
                                      'zh',
                                      'en',
                                      'cht'
                                  ], {"default": "en"}),
+                "baidu_appid": ("STRING", {"multiline": False, "placeholder": "Input AppId"}),
+                "baidu_appkey": ("STRING", {"multiline": False, "placeholder": "Input AppKey"}),
                 "text": ("STRING", {"multiline": True, "placeholder": "Input prompt"}),
             }
         }

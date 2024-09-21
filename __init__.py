@@ -6,12 +6,12 @@ from .nodes.baidu_translate import BaiduTranslateNode
 NODE_CLASS_MAPPINGS = {
     "ConvertGrayChannelNode": ConvertGrayChannelNode,
     "AdjustBrightnessContrastSaturationNode": AdjustBrightnessContrastSaturationNode,
-    "BaiduTranslateNode": BaiduTranslateNode
+    "BaiduTranslateNode": BaiduTranslateNode,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
     "ConvertGrayChannelNode": "Image To Grayscale And Channels",
     "AdjustBrightnessContrastSaturationNode": "Adjust Brightness Contrast Saturation",
-    "BaiduTranslateNode": "Baidu Translate"
+    "BaiduTranslateNode": "Baidu Translate",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

@@ -8,7 +8,9 @@ def adjust_brightness_contrast_saturation(image, brightness, contrast, saturatio
     if brightness > 1:
         br = math.log10(brightness)*250
     elif brightness < 1:
-        br = math.log10(brightness)*100
+        br = math.log10(brightness)*200
+        if br < -120:
+            br = -120
     else:
         br = 0
 

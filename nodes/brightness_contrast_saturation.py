@@ -19,7 +19,7 @@ class AdjustBrightnessContrastSaturationNode:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "brightness": ("FLOAT", {"default": 0, "min": -1.0, "max": 3.0, "step": 0.1}),
+                "brightness": ("FLOAT", {"default": 0, "min": -3.0, "max": 3.0, "step": 0.1}),
                 "contrast": ("FLOAT", {"default": 1.0, "min": 0, "max": 3.0, "step": 0.1}),
                 "saturation": ("FLOAT", {"default": 1.0, "min": 0, "max": 3.0, "step": 0.1}),
             }

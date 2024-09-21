@@ -7,6 +7,7 @@ import base64
 def make_md5(s, encoding='utf-8'):
     return md5(s.encode(encoding)).hexdigest()
 
+
 def decrypt(encrypted_message):
     return base64.b64decode(encrypted_message).decode('utf-8')
 
@@ -27,10 +28,10 @@ class BaiduTranslateNode:
                     {"default": "auto"},
                 ),
                 "to_translate": ([
-                        'zh',
-                        'en',
-                        'cht'
-                    ], {"default": "en"}),
+                                     'zh',
+                                     'en',
+                                     'cht'
+                                 ], {"default": "en"}),
                 "text": ("STRING", {"multiline": True, "placeholder": "Input prompt"}),
             }
         }
@@ -57,6 +58,7 @@ class BaiduTranslateNode:
         payload = {'appid': appid, 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
 
         r = requests.post(url, params=payload, headers=headers)
+        print("=======", r)
         result = r.json()
         txt = result['trans_result'][0]['dst']
 

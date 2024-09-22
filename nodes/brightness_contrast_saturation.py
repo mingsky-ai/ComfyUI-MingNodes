@@ -18,7 +18,7 @@ def adjust_contrast(image, contrast):
     if contrast > 1:
         hsv = cv2.cvtColor(adjusted, cv2.COLOR_BGR2HSV)
         h, s, v = cv2.split(hsv)
-        s = cv2.addWeighted(s, contrast * 0.4, 0, 0, 0)
+        s = cv2.addWeighted(s, contrast * 0.55, 0, 0, 0)
         vibrance = cv2.merge((h, s, v))
         return cv2.cvtColor(vibrance, cv2.COLOR_HSV2BGR)
     else:

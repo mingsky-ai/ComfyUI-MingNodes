@@ -3,6 +3,28 @@ import numpy as np
 import torch
 
 
+def adjust_contrast(image, contrast):
+    cnst = 1
+    if contrast > 1:
+        cnst = contrast * 0.7
+    elif contrast < 1:
+        cnst = contrast
+    beta = 0
+    if contrast > 1:
+        beta = np.mean(image) * 0.2 * (1 - contrast)
+    elif contrast < 1:
+        beta = np.mean(image) * 0.5 * (1 - contrast)
+    adjusted = cv2.convertScaleAbs(image, alpha=cnst, beta=beta)
+    if contrast > 1:
+        hsv = cv2.cvtColor(adjusted, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        s = cv2.addWeighted(s, contrast * 0.6, 0, 0, 0)
+        vibrance = cv2.merge((h, s, v))
+        return cv2.cvtColor(vibrance, cv2.COLOR_HSV2BGR)
+    else:
+        return adjusted
+
+
 def adjust_brightness_contrast_saturation(image, brightness, contrast, saturation):
     blank = np.zeros_like(image)
     if brightness > 1:
@@ -11,14 +33,8 @@ def adjust_brightness_contrast_saturation(image, brightness, contrast, saturatio
         br = (brightness - 1) * 200
     else:
         br = 0
-    cnst = 1
-    if contrast > 1:
-        cnst = contrast*0.8
-    elif contrast < 1:
-        cnst = contrast
     adjusted = cv2.addWeighted(image, 1, blank, 0.5, br)
-    beta = np.mean(adjusted)*0.65 * (1 - contrast)
-    adjusted2 = cv2.convertScaleAbs(adjusted, alpha=cnst, beta=beta)
+    adjusted2 = adjust_contrast(adjusted, contrast)
     hsv = cv2.cvtColor(adjusted2, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)

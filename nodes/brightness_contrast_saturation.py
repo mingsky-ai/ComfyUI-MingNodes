@@ -11,9 +11,14 @@ def adjust_brightness_contrast_saturation(image, brightness, contrast, saturatio
         br = (brightness - 1) * 200
     else:
         br = 0
+    cnst = 1
+    if contrast > 1:
+        cnst = contrast*0.8
+    elif contrast < 1:
+        cnst = contrast
     adjusted = cv2.addWeighted(image, 1, blank, 0.5, br)
-    beta = np.mean(adjusted) * (1 - contrast)
-    adjusted2 = cv2.convertScaleAbs(adjusted, alpha=contrast, beta=beta)
+    beta = np.mean(adjusted)*0.65 * (1 - contrast)
+    adjusted2 = cv2.convertScaleAbs(adjusted, alpha=cnst, beta=beta)
     hsv = cv2.cvtColor(adjusted2, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     s = cv2.addWeighted(s, saturation, 0, 0, 0)
@@ -28,9 +33,9 @@ class AdjustBrightnessContrastSaturationNode:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "brightness": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
-                "contrast": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
-                "saturation": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 3.0, "step": 0.01}),
+                "brightness": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 2.0, "step": 0.01}),
+                "contrast": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 2.0, "step": 0.01}),
+                "saturation": ("FLOAT", {"default": 1.0, "min": 0.01, "max": 2.0, "step": 0.01}),
             }
         }
 

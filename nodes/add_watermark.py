@@ -30,12 +30,13 @@ def add_image_watermark(original, watermark, x, y, opacity, scale):
     return watermarked
 
 
-def add_text_watermark(original, text, x, y, scale, opacity, color):
+def add_text_watermark(original, text, x, y, scale, opacity, color, fonts):
     # 创建一个透明图层
     txt = Image.new('RGBA', original.size, (255, 255, 255, 0))
     # 获取字体
-    font_path = os.path.join(folder_paths.get_output_directory(), 'ComfyUI-MingNodes', 'fonts', 'msyh.ttf')
+    font_path = os.path.join(folder_paths.get_output_directory(), 'ComfyUI-MingNodes', 'fonts')
     font_path = font_path.replace("output", "custom_nodes")
+    font_path = os.path.join(font_path, fonts)
     font_size = int(40 * scale)
     font = ImageFont.truetype(font_path, font_size)
     # 创建绘图对象
@@ -60,20 +61,24 @@ def hex_to_rgb(hex_color):
 class AddWaterMarkNode:
     @classmethod
     def INPUT_TYPES(s):
+        font_path = os.path.join(folder_paths.get_output_directory(), 'ComfyUI-MingNodes', 'fonts')
+        font_path = font_path.replace("output", "custom_nodes")
+        files = [f for f in os.listdir(font_path) if os.path.isfile(os.path.join(font_path, f))]
 
         return {
             "required": {
                 "image": ("IMAGE",),
                 "image_watermark": ("BOOLEAN", {"default": True}),
-                "position_X": ("INT", {"default": 0, "min": 0, "max": 100000, "step": 1}),
-                "position_Y": ("INT", {"default": 0, "min": 0, "max": 100000, "step": 1}),
+                "position_X": ("INT", {"default": 0, "min": 0, "max": 10000, "step": 1}),
+                "position_Y": ("INT", {"default": 0, "min": 0, "max": 10000, "step": 1}),
                 "opacity": ("FLOAT", {"default": 1.0, "min": 0, "max": 1.0, "step": 0.1}),
-                "scale": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 5.0, "step": 0.1}),
+                "scale": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
             "optional": {
                 "image_watermark_path": ("STRING",),
                 "text": ("STRING",),
                 "text_color": ("STRING", {"default": "#FFFFFF"}),
+                "fonts": ((sorted(files),)),
             },
         }
 
@@ -84,7 +89,7 @@ class AddWaterMarkNode:
     FUNCTION = "add_watermark"
 
     def add_watermark(self, image, image_watermark, position_X, position_Y, opacity, scale, image_watermark_path,
-                      text, text_color):
+                      text, text_color, fonts):
 
         if image_watermark:
             result = []
@@ -101,7 +106,7 @@ class AddWaterMarkNode:
             for img in image:
                 img_cv2 = Image.fromarray((img.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGBA")
             adjusted_image2 = add_text_watermark(img_cv2, str(text), position_X, position_Y, scale,
-                                                 opacity, hex_to_rgb(text_color))
+                                                 opacity, hex_to_rgb(text_color), fonts)
             rst2 = torch.from_numpy(np.array(adjusted_image2).astype(np.float32) / 255.0).to(image.device)
             result2.append(rst2)
             final_tensor2 = torch.stack(result2)

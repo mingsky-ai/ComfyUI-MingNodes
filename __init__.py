@@ -15,7 +15,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ConvertGrayChannelNode": "Grayscale Channels",
     "AdjustBrightnessContrastSaturationNode": "Brightness Contrast Saturation",
     "BaiduTranslateNode": "Baidu Translate",
-    "AddWaterMarkNode": "Add WaterMark",
+    "AddWaterMarkNode": "Add Watermark",
     "LoadImagePathNode": "Load Image",
 }
 

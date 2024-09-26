@@ -33,7 +33,7 @@ class BaiduTranslateNode:
             }
         }
 
-    CATEGORY = "MingNode/Translate"
+    CATEGORY = "MingNodes/Translate"
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("text",)

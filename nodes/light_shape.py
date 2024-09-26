@@ -142,7 +142,7 @@ class LightShapeNode:
             },
         }
 
-    CATEGORY = "MingNode/Image Process"
+    CATEGORY = "MingNodes/Image Process"
 
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)

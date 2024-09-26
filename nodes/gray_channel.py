@@ -13,7 +13,7 @@ class ConvertGrayChannelNode:
             }
         }
 
-    CATEGORY = "MingNode/Image Process"
+    CATEGORY = "MingNodes/Image Process"
 
     RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "IMAGE",)
     RETURN_NAMES = ("grayscale", "blue channel", "green channel", "red channel",)

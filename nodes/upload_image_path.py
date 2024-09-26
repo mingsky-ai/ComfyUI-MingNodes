@@ -15,7 +15,7 @@ class LoadImagePathNode:
                     {"image": (sorted(files), {"image_upload": True})},
                 }
 
-    CATEGORY = "MingNode/Loader"
+    CATEGORY = "MingNodes/Loader"
 
     RETURN_TYPES = ("IMAGE", "MASK", "STRING")
     RETURN_NAMES = ("image", "mask", "image path")

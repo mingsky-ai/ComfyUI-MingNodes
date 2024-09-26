@@ -5,20 +5,18 @@ import torch
 
 
 def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_color=(255, 255, 255),
-               shape_color=(0, 0, 0), opacity=1.0):
+               shape_color=(0, 0, 0), opacity=1.0, base_image=None):
     width, height = size
     offset_x, offset_y = offset
     center_x, center_y = width // 2 + offset_x, height // 2 + offset_y
     max_dim = min(width, height) * scale
 
-    # 计算旋转后可能的最大尺寸
     diagonal = int(math.sqrt(width ** 2 + height ** 2))
     img_tmp = Image.new('RGBA', (diagonal, diagonal), (0, 0, 0, 0))
     draw_tmp = ImageDraw.Draw(img_tmp)
 
     tmp_center = diagonal // 2
 
-    # 将不透明度（0-1）转换为 alpha 值（0-255）
     alpha = int(opacity * 255)
     shape_color = shape_color + (alpha,)
 
@@ -83,15 +81,18 @@ def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_
     # 旋转图像
     img_tmp = img_tmp.rotate(rotation, resample=Image.BICUBIC, expand=True)
 
-    # 创建最终图像
-    img = Image.new('RGBA', size, bg_color + (255,))
+    # 创建或使用基础图像
+    if base_image is None:
+        img = Image.new('RGBA', size, bg_color + (255,))
+    else:
+        img = base_image.copy()
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
 
-    # 计算粘贴位置，使图形居中
     paste_x = center_x - img_tmp.width // 2
     paste_y = center_y - img_tmp.height // 2
 
-    # 粘贴旋转后的图像
-    img.paste(img_tmp, (paste_x, paste_y), img_tmp)
+    img.alpha_composite(img_tmp, (paste_x, paste_y))
 
     return img
 
@@ -135,7 +136,10 @@ class LightShapeNode:
                 "opacity": ("FLOAT", {"default": 1.0, "min": 0, "max": 1.0, "step": 0.1}),
                 "background_color": ("STRING", {"default": "#000000"}),
                 "shape_color": ("STRING", {"default": "#FFFFFF"}),
-            }
+            },
+            "optional": {
+                "base_image": ("IMAGE", {"default": None}),
+            },
         }
 
     CATEGORY = "MingNode/Image Process"
@@ -145,9 +149,19 @@ class LightShapeNode:
     FUNCTION = "drew_light_shape"
 
     def drew_light_shape(self, wide, height, shape, X_offset, Y_offset, scale, rotation, opacity, background_color,
-                         shape_color):
-        image = draw_shape(shape, size=(wide, height), offset=(X_offset, Y_offset), scale=scale,
-                           rotation=rotation,
-                           bg_color=hex_to_rgb(background_color), shape_color=hex_to_rgb(shape_color), opacity=opacity)
-        rst = torch.from_numpy(np.array(image).astype(np.float32) / 255.0).unsqueeze(0)
+                         shape_color, base_image=None):
+
+        if base_image is None:
+            img = draw_shape(shape, size=(wide, height), offset=(X_offset, Y_offset), scale=scale,
+                             rotation=rotation,
+                             bg_color=hex_to_rgb(background_color), shape_color=hex_to_rgb(shape_color),
+                             opacity=opacity)
+        else:
+            img_cv = Image.fromarray((base_image.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGBA")
+            img = draw_shape(shape, size=(wide, height), offset=(X_offset, Y_offset), scale=scale,
+                             rotation=rotation,
+                             bg_color=hex_to_rgb(background_color), shape_color=hex_to_rgb(shape_color),
+                             opacity=opacity, base_image=img_cv)
+
+        rst = torch.from_numpy(np.array(img).astype(np.float32) / 255.0).unsqueeze(0)
         return (rst,)

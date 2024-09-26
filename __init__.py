@@ -18,7 +18,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BaiduTranslateNode": "Baidu Translate",
     "AddWaterMarkNode": "Add Watermark",
     "LoadImagePathNode": "Load Image",
-    "LightShapeNode": "Draw IC-Light Light Shape",
+    "LightShapeNode": "IC-Light Light Shape",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

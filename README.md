@@ -20,3 +20,7 @@ Baidu Translate, which can translate between Chinese, English and Traditional Ch
 The image watermark function can add image watermarks and text watermarks. You can adjust the position, size, and transparency of the watermark. The text watermark can also customize the font color and font. You can add fonts yourself and put them in the fonts folder of the plug-in directory.
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
+
+3: IC-Light的自定义光源，可以定义光源各种形状，位置偏移(位置可调整为负数)，缩放，亮度，旋转，背景和光源颜色。
+
+IC-Light's custom light source can define various shapes, position offsets (position can be adjusted to negative numbers), scale, brightness, rotation, background and light color.

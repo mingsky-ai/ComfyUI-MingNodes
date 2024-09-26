@@ -1,6 +1,6 @@
 [project]
 name = "ComfyUI_MingNodes"
-description = "Nodes: ConvertGrayChannelNode, AdjustBrightnessContrastSaturationNode, BaiduTranslateNode, AddWaterMarkNode"
+description = "Nodes: ConvertGrayChannelNode, AdjustBrightnessContrastSaturationNode, BaiduTranslateNode, AddWaterMarkNode,LightShapeNode"
 version = "1.0"
 license = { file = "LICENSE" }
 

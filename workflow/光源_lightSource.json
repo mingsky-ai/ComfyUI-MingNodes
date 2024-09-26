@@ -1,0 +1,292 @@
+{
+  "last_node_id": 7,
+  "last_link_id": 6,
+  "nodes": [
+    {
+      "id": 4,
+      "type": "LayerFilter: GaussianBlur",
+      "pos": {
+        "0": 4710,
+        "1": 2860
+      },
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3,
+          "label": "图像"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            4
+          ],
+          "shape": 3,
+          "label": "图像",
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LayerFilter: GaussianBlur"
+      },
+      "widgets_values": [
+        50
+      ],
+      "color": "rgba(34, 67, 111, 0.7)"
+    },
+    {
+      "id": 5,
+      "type": "PreviewImage",
+      "pos": {
+        "0": 5130,
+        "1": 2380
+      },
+      "size": [
+        330,
+        380
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 4,
+          "label": "图像"
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 7,
+      "type": "LayerUtility: ColorPicker",
+      "pos": {
+        "0": 3940,
+        "1": 2500
+      },
+      "size": {
+        "0": 290,
+        "1": 100
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "value",
+          "type": "STRING",
+          "links": [
+            5
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "值"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LayerUtility: ColorPicker"
+      },
+      "widgets_values": [
+        "#000000",
+        "HEX"
+      ],
+      "color": "#3d3e4c",
+      "bgcolor": "#292a38"
+    },
+    {
+      "id": 2,
+      "type": "PreviewImage",
+      "pos": {
+        "0": 4730,
+        "1": 2380
+      },
+      "size": {
+        "0": 370,
+        "1": 380
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2,
+          "label": "图像"
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "LayerUtility: ColorPicker",
+      "pos": {
+        "0": 3940,
+        "1": 2710
+      },
+      "size": {
+        "0": 290,
+        "1": 100
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "value",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "值"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LayerUtility: ColorPicker"
+      },
+      "widgets_values": [
+        "#ffffff",
+        "HEX"
+      ],
+      "color": "#3d3e4c",
+      "bgcolor": "#292a38"
+    },
+    {
+      "id": 3,
+      "type": "LightShapeNode",
+      "pos": {
+        "0": 4320,
+        "1": 2420
+      },
+      "size": [
+        320,
+        270
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "background_color",
+          "type": "STRING",
+          "link": 5,
+          "widget": {
+            "name": "background_color"
+          }
+        },
+        {
+          "name": "shape_color",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "shape_color"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            2,
+            3
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "image"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LightShapeNode"
+      },
+      "widgets_values": [
+        512,
+        512,
+        "ellipse",
+        250,
+        0,
+        1,
+        90,
+        1,
+        "#000000",
+        "#FFFFFF"
+      ]
+    }
+  ],
+  "links": [
+    [
+      2,
+      3,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      4,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      7,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      6,
+      6,
+      0,
+      3,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.4122927695244514,
+      "offset": [
+        -3536.8223922039415,
+        -2204.6450202206893
+      ]
+    }
+  },
+  "version": 0.4
+}

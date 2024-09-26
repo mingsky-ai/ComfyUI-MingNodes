@@ -21,8 +21,8 @@ The image watermark function can add image watermarks and text watermarks. You c
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
 
-3: IC-Light的自定义光源，可以定义光源各种形状，位置偏移(位置可调整为负数)，缩放，亮度，旋转，背景和光源颜色。
+3: IC-Light的自定义光源，可以定义光源各种形状，位置偏移(位置可调整为负数)，缩放，亮度，旋转，背景和光源颜色,可以多个光源组合在一起，绘制任意图像的光源。
 
-IC-Light's custom light source can define various shapes, position offsets (position can be adjusted to negative numbers), scale, brightness, rotation, background and light color.
+IC-Light's custom light source can define various shapes, position offsets (position can be adjusted to negative numbers), scale, brightness, rotation, background and light color.multiple light sources can be combined together to draw the light source of any image.
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/light_source.png?raw=true)

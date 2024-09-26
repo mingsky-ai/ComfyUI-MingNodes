@@ -1,11 +1,11 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 import math
 import numpy as np
 import torch
 
 
 def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_color=(255, 255, 255),
-               shape_color=(0, 0, 0), opacity=1.0, base_image=None):
+               shape_color=(0, 0, 0), opacity=1.0, blur_radius=0, base_image=None):
     width, height = size
     offset_x, offset_y = offset
     center_x, center_y = width // 2 + offset_x, height // 2 + offset_y
@@ -94,6 +94,9 @@ def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_
 
     img.alpha_composite(img_tmp, (paste_x, paste_y))
 
+    if blur_radius > 0:
+        img = img.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
     return img
 
 
@@ -134,6 +137,7 @@ class LightShapeNode:
                 "scale": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
                 "rotation": ("INT", {"default": 0, "min": 0, "max": 360, "step": 1}),
                 "opacity": ("FLOAT", {"default": 1.0, "min": 0, "max": 1.0, "step": 0.1}),
+                "blur_radius": ("INT", {"default": 0, "min": 0, "max": 1000, "step": 1}),
                 "background_color": ("STRING", {"default": "#000000"}),
                 "shape_color": ("STRING", {"default": "#FFFFFF"}),
             },
@@ -148,20 +152,20 @@ class LightShapeNode:
     RETURN_NAMES = ("image",)
     FUNCTION = "drew_light_shape"
 
-    def drew_light_shape(self, wide, height, shape, X_offset, Y_offset, scale, rotation, opacity, background_color,
+    def drew_light_shape(self, wide, height, shape, X_offset, Y_offset, scale, rotation, opacity, blur_radius, background_color,
                          shape_color, base_image=None):
 
         if base_image is None:
             img = draw_shape(shape, size=(wide, height), offset=(X_offset, Y_offset), scale=scale,
                              rotation=rotation,
                              bg_color=hex_to_rgb(background_color), shape_color=hex_to_rgb(shape_color),
-                             opacity=opacity)
+                             opacity=opacity, blur_radius=blur_radius)
         else:
             img_cv = Image.fromarray((base_image.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGBA")
             img = draw_shape(shape, size=(wide, height), offset=(X_offset, Y_offset), scale=scale,
                              rotation=rotation,
                              bg_color=hex_to_rgb(background_color), shape_color=hex_to_rgb(shape_color),
-                             opacity=opacity, base_image=img_cv)
+                             opacity=opacity, blur_radius=blur_radius, base_image=img_cv)
 
         rst = torch.from_numpy(np.array(img).astype(np.float32) / 255.0).unsqueeze(0)
         return (rst,)

@@ -37,7 +37,11 @@ class LoadImagePathNode:
 
             if i.mode == 'I':
                 i = i.point(lambda i: i * (1 / 255))
-            image = i.convert("RGB")
+
+            if i.mode == 'RGB':
+                image = i.convert("RGB")
+            elif i.mode == 'RGBA':
+                image = i.convert("RGBA")
 
             if len(output_images) == 0:
                 w = image.size[0]

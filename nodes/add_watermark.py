@@ -75,8 +75,9 @@ class AddWaterMarkNode:
                 "scale": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 10.0, "step": 0.1}),
             },
             "optional": {
-                "image_watermark_path": ("STRING",),
-                "text": ("STRING",),
+                "watermark": ("IMAGE",),
+                "watermark_mask": ("MASK",),
+                "text": ("STRING", {"default": "enter text"}),
                 "text_color": ("STRING", {"default": "#FFFFFF"}),
                 "fonts": ((sorted(files),)),
             },
@@ -88,15 +89,28 @@ class AddWaterMarkNode:
     RETURN_NAMES = ("image",)
     FUNCTION = "add_watermark"
 
-    def add_watermark(self, image, image_watermark, position_X, position_Y, opacity, scale, image_watermark_path,
-                      text, text_color, fonts):
+    def add_watermark(self, image, image_watermark, position_X, position_Y, opacity, scale,
+                      text, text_color, fonts, watermark=None, watermark_mask=None,):
 
         if image_watermark:
             result = []
-            for img in image:
-                img_cv1 = Image.fromarray((img.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGBA")
-            img_cv2 = Image.open(image_watermark_path).convert("RGBA")
-            adjusted_image = add_image_watermark(img_cv1, img_cv2, position_X, position_Y, opacity, scale)
+            for img1 in image:
+                img_cv1 = Image.fromarray((img1.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGBA")
+            for img2 in watermark:
+                rgb_image = Image.fromarray((img2.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGB")
+            for img3 in watermark_mask:
+                mask_image = Image.fromarray((img3.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("L")
+            if rgb_image.size != mask_image.size:
+                raise ValueError("RGB图像和mask图像的大小必须相同")
+            rgba_image = Image.new('RGBA', rgb_image.size)
+            rgb_data = rgb_image.getdata()
+            mask_data = mask_image.getdata()
+            rgba_data = []
+            for rgb, alpha in zip(rgb_data, mask_data):
+                inverted_alpha = 255 - alpha
+                rgba_data.append(rgb + (inverted_alpha,))
+            rgba_image.putdata(rgba_data)
+            adjusted_image = add_image_watermark(img_cv1, rgba_image, position_X, position_Y, opacity, scale)
             rst = torch.from_numpy(np.array(adjusted_image).astype(np.float32) / 255.0).to(image.device)
             result.append(rst)
             final_tensor = torch.stack(result)

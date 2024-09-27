@@ -9,7 +9,6 @@ NODE_CLASS_MAPPINGS = {
     "AdjustBrightnessContrastSaturationNode": AdjustBrightnessContrastSaturationNode,
     "BaiduTranslateNode": BaiduTranslateNode,
     "AddWaterMarkNode": AddWaterMarkNode,
-    "LoadImagePathNode": LoadImagePathNode,
     "LightShapeNode": LightShapeNode,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -17,7 +16,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "AdjustBrightnessContrastSaturationNode": "Brightness Contrast Saturation",
     "BaiduTranslateNode": "Baidu Translate",
     "AddWaterMarkNode": "Add Watermark",
-    "LoadImagePathNode": "Load Image",
     "LightShapeNode": "IC-Light Light Shape",
 }
 

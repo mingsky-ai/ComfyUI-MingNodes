@@ -1,13 +1,151 @@
 {
-  "last_node_id": 7,
-  "last_link_id": 10,
+  "last_node_id": 13,
+  "last_link_id": 21,
   "nodes": [
+    {
+      "id": 8,
+      "type": "AddWaterMarkNode",
+      "pos": {
+        "0": 4630,
+        "1": 3260
+      },
+      "size": {
+        "0": 315,
+        "1": 266
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 10,
+          "label": "image"
+        },
+        {
+          "name": "watermark",
+          "type": "IMAGE",
+          "link": 11,
+          "label": "watermark"
+        },
+        {
+          "name": "watermark_mask",
+          "type": "MASK",
+          "link": 17,
+          "label": "watermark_mask"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            18
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "image"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AddWaterMarkNode"
+      },
+      "widgets_values": [
+        true,
+        0,
+        0,
+        1,
+        1,
+        "",
+        "#FFFFFF",
+        "blackrumbleregular.ttf"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "AddWaterMarkNode",
+      "pos": {
+        "0": 5000,
+        "1": 3260
+      },
+      "size": [
+        310,
+        260
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 18,
+          "label": "image"
+        },
+        {
+          "name": "watermark",
+          "type": "IMAGE",
+          "link": null,
+          "label": "watermark"
+        },
+        {
+          "name": "watermark_mask",
+          "type": "MASK",
+          "link": null,
+          "label": "watermark_mask"
+        },
+        {
+          "name": "text_color",
+          "type": "STRING",
+          "link": 19,
+          "widget": {
+            "name": "text_color"
+          },
+          "label": "text_color"
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 21,
+          "widget": {
+            "name": "text"
+          },
+          "label": "text"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            20
+          ],
+          "slot_index": 0,
+          "shape": 3,
+          "label": "image"
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AddWaterMarkNode"
+      },
+      "widgets_values": [
+        false,
+        200,
+        1600,
+        1,
+        7,
+        "",
+        "#FFFFFF",
+        "沙孟海书法字体.ttf"
+      ]
+    },
     {
       "id": 2,
       "type": "LoadImage",
       "pos": {
-        "0": 7050,
-        "1": 540
+        "0": 4200,
+        "1": 3210
       },
       "size": [
         320,
@@ -22,8 +160,9 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            1
+            10
           ],
+          "slot_index": 0,
           "shape": 3,
           "label": "图像"
         },
@@ -44,42 +183,15 @@
       ]
     },
     {
-      "id": 6,
-      "type": "PreviewImage",
+      "id": 3,
+      "type": "LoadImage",
       "pos": {
-        "0": 8180,
-        "1": 570
+        "0": 4190,
+        "1": 3590
       },
       "size": [
-        510,
-        660
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 10,
-          "label": "图像"
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewImage"
-      }
-    },
-    {
-      "id": 4,
-      "type": "easy positive",
-      "pos": {
-        "0": 7430,
-        "1": 900
-      },
-      "size": [
-        330,
-        130
+        320,
+        310
       ],
       "flags": {},
       "order": 1,
@@ -87,33 +199,40 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "positive",
-          "type": "STRING",
+          "name": "IMAGE",
+          "type": "IMAGE",
           "links": [
-            3,
-            6
+            11
           ],
+          "slot_index": 0,
           "shape": 3,
-          "label": "正面提示词",
-          "slot_index": 0
+          "label": "图像"
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            17
+          ],
+          "slot_index": 1,
+          "shape": 3,
+          "label": "遮罩"
         }
       ],
       "properties": {
-        "Node name for S&R": "easy positive"
+        "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "龙飞凤舞",
-        true
-      ],
-      "color": "#232",
-      "bgcolor": "#353"
+        "watermark.png",
+        "image"
+      ]
     },
     {
-      "id": 5,
+      "id": 11,
       "type": "LayerUtility: ColorPicker",
       "pos": {
-        "0": 7440,
-        "1": 1100
+        "0": 4640,
+        "1": 3580
       },
       "size": {
         "0": 290,
@@ -128,8 +247,7 @@
           "name": "value",
           "type": "STRING",
           "links": [
-            4,
-            7
+            19
           ],
           "slot_index": 0,
           "shape": 3,
@@ -147,284 +265,137 @@
       "bgcolor": "#292a38"
     },
     {
-      "id": 3,
-      "type": "LoadImagePathNode",
+      "id": 13,
+      "type": "easy positive",
       "pos": {
-        "0": 7050,
-        "1": 910
+        "0": 4630,
+        "1": 3740
       },
-      "size": [
-        320,
-        330
-      ],
+      "size": {
+        "0": 330,
+        "1": 130
+      },
       "flags": {},
       "order": 3,
       "mode": 0,
       "inputs": [],
       "outputs": [
         {
-          "name": "image",
-          "type": "IMAGE",
-          "links": null,
-          "shape": 3,
-          "label": "image"
-        },
-        {
-          "name": "mask",
-          "type": "MASK",
-          "links": null,
-          "shape": 3,
-          "label": "mask"
-        },
-        {
-          "name": "image path",
+          "name": "positive",
           "type": "STRING",
           "links": [
-            2,
-            8
+            21
           ],
+          "slot_index": 0,
           "shape": 3,
-          "label": "image path",
-          "slot_index": 2
+          "label": "正面提示词"
         }
       ],
       "properties": {
-        "Node name for S&R": "LoadImagePathNode"
+        "Node name for S&R": "easy positive"
       },
       "widgets_values": [
-        "watermark.png",
-        "image"
-      ]
+        "龙飞凤舞",
+        true
+      ],
+      "color": "#232",
+      "bgcolor": "#353"
     },
     {
-      "id": 1,
-      "type": "AddWaterMarkNode",
+      "id": 12,
+      "type": "PreviewImage",
       "pos": {
-        "0": 7430,
-        "1": 580
+        "0": 5360,
+        "1": 3250
       },
       "size": [
-        320,
-        250
+        470,
+        600
       ],
       "flags": {},
-      "order": 4,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
-          "name": "image",
+          "name": "images",
           "type": "IMAGE",
-          "link": 1,
-          "label": "image"
-        },
-        {
-          "name": "image_watermark_path",
-          "type": "STRING",
-          "link": 2,
-          "widget": {
-            "name": "image_watermark_path"
-          }
-        },
-        {
-          "name": "text_color",
-          "type": "STRING",
-          "link": 4,
-          "widget": {
-            "name": "text_color"
-          }
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 3,
-          "widget": {
-            "name": "text"
-          }
+          "link": 20,
+          "label": "图像"
         }
       ],
-      "outputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "links": [
-            9
-          ],
-          "shape": 3,
-          "label": "image",
-          "slot_index": 0
-        }
-      ],
+      "outputs": [],
       "properties": {
-        "Node name for S&R": "AddWaterMarkNode"
+        "Node name for S&R": "PreviewImage"
       },
-      "widgets_values": [
-        true,
-        1,
-        1,
-        0.9,
-        1,
-        "",
-        "",
-        "#FFFFFF",
-        "沙孟海书法字体.ttf"
-      ]
-    },
-    {
-      "id": 7,
-      "type": "AddWaterMarkNode",
-      "pos": {
-        "0": 7810,
-        "1": 580
-      },
-      "size": {
-        "0": 320,
-        "1": 250
-      },
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 9,
-          "label": "image"
-        },
-        {
-          "name": "image_watermark_path",
-          "type": "STRING",
-          "link": 8,
-          "widget": {
-            "name": "image_watermark_path"
-          }
-        },
-        {
-          "name": "text_color",
-          "type": "STRING",
-          "link": 7,
-          "widget": {
-            "name": "text_color"
-          }
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 6,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "links": [
-            10
-          ],
-          "shape": 3,
-          "label": "image",
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "AddWaterMarkNode"
-      },
-      "widgets_values": [
-        false,
-        200,
-        1600,
-        1,
-        7,
-        "",
-        "",
-        "#FFFFFF",
-        "沙孟海书法字体.ttf"
-      ]
+      "widgets_values": []
     }
   ],
   "links": [
     [
-      1,
-      2,
-      0,
-      1,
-      0,
-      "IMAGE"
-    ],
-    [
-      2,
-      3,
-      2,
-      1,
-      1,
-      "STRING"
-    ],
-    [
-      3,
-      4,
-      0,
-      1,
-      3,
-      "STRING"
-    ],
-    [
-      4,
-      5,
-      0,
-      1,
-      2,
-      "STRING"
-    ],
-    [
-      6,
-      4,
-      0,
-      7,
-      3,
-      "STRING"
-    ],
-    [
-      7,
-      5,
-      0,
-      7,
-      2,
-      "STRING"
-    ],
-    [
-      8,
-      3,
-      2,
-      7,
-      1,
-      "STRING"
-    ],
-    [
-      9,
-      1,
-      0,
-      7,
-      0,
-      "IMAGE"
-    ],
-    [
       10,
-      7,
+      2,
       0,
-      6,
+      8,
       0,
       "IMAGE"
+    ],
+    [
+      11,
+      3,
+      0,
+      8,
+      1,
+      "IMAGE"
+    ],
+    [
+      17,
+      3,
+      1,
+      8,
+      2,
+      "MASK"
+    ],
+    [
+      18,
+      8,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      11,
+      0,
+      10,
+      3,
+      "STRING"
+    ],
+    [
+      20,
+      10,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      21,
+      13,
+      0,
+      10,
+      4,
+      "STRING"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.5535220464768968,
+      "scale": 1.1671841070450009,
       "offset": [
-        -6801.437063346766,
-        -515.437062469443
+        -3510.0632324420226,
+        -3107.638839763504
       ]
     }
   },

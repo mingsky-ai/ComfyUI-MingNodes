@@ -26,3 +26,13 @@ The image watermark function can add image watermarks and text watermarks. You c
 IC-Light's custom light source can define various shapes, position offsets (position can be adjusted to negative numbers), scale, brightness, rotation, background and light color，gaussian blur of image.multiple light sources can be combined together to draw the light source of any image.
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/light_source.png?raw=true)
+
+3: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，脸部保护参数值越大越接近原图。
+
+Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. The larger the face protection parameter value, the closer it is to the original image.
+
+![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/imitation1.png?raw=true)
+
+![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/imitation2.png?raw=true)
+
+![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/imitation3.png?raw=true)

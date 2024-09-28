@@ -4,18 +4,20 @@ import torch
 
 
 def image_stats(image):
-    means = []
-    stds = []
-    for channel in range(1, 3):
-        means.append(np.mean(image[:, :, channel]))
-        stds.append(np.std(image[:, :, channel]))
-    return means, stds
+    return np.mean(image[:, :, 1:], axis=(0, 1)), np.std(image[:, :, 1:], axis=(0, 1))
 
 
-def is_skin_or_lips(l, a, b):
-    is_skin = (l > 20) and (l < 250) and (a > 120) and (a < 180) and (b > 120) and (b < 190)
-    is_lips = (l > 20) and (l < 200) and (a > 150) and (b > 140)
-    return is_skin or is_lips
+def is_skin_or_lips(lab_image):
+    l, a, b = lab_image[:, :, 0], lab_image[:, :, 1], lab_image[:, :, 2]
+    skin = (l > 20) & (l < 250) & (a > 120) & (a < 180) & (b > 120) & (b < 190)
+    lips = (l > 20) & (l < 200) & (a > 150) & (b > 140)
+    return (skin | lips).astype(np.float32)
+
+
+def adjust_brightness(image, factor):
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hsv[:, :, 2] = np.clip(hsv[:, :, 2] * factor, 0, 255).astype(np.uint8)
+    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
 
 def tensor2cv2(image: torch.Tensor) -> np.array:
@@ -26,47 +28,30 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
     return cv2.cvtColor(cv2image, cv2.COLOR_RGB2BGR)
 
 
-def adjust_brightness(image, factor):
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    h, s, v = cv2.split(hsv)
-    v = np.clip(v * factor, 0, 255).astype(np.uint8)
-    hsv = cv2.merge((h, s, v))
-    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
-
-
 def color_transfer(source, target, strength=0.8, skin_protection=0.7):
     source_brightness = np.mean(cv2.cvtColor(source, cv2.COLOR_BGR2GRAY))
     target_brightness = np.mean(cv2.cvtColor(target, cv2.COLOR_BGR2GRAY))
     source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
-    target_l, target_a, target_b = cv2.split(target_lab)
     src_means, src_stds = image_stats(source_lab)
     tar_means, tar_stds = image_stats(target_lab)
-    skin_lips_mask = np.apply_along_axis(lambda x: is_skin_or_lips(*x), 2, target_lab.astype(np.uint8)).astype(
-        np.float32)
+    skin_lips_mask = is_skin_or_lips(target_lab.astype(np.uint8))
     skin_lips_mask = cv2.GaussianBlur(skin_lips_mask, (5, 5), 0)
-    result_lab = np.zeros_like(target_lab)
-    result_lab[:, :, 0] = target_l  # 保持亮度不变
-    for i, channel in enumerate([target_a, target_b]):
-        adjusted_channel = (channel - tar_means[i]) * (src_stds[i] / (tar_stds[i] + 1e-6)) + src_means[i]
-        adjusted_channel = np.clip(adjusted_channel, 0, 255)
-        result_channel = channel * skin_lips_mask * skin_protection + \
-                         adjusted_channel * skin_lips_mask * (1 - skin_protection) + \
-                         adjusted_channel * (1 - skin_lips_mask)
 
-        result_lab[:, :, i + 1] = result_channel
-    result_lab = np.clip(result_lab, 0, 255).astype(np.uint8)
-    result_bgr = cv2.cvtColor(result_lab, cv2.COLOR_LAB2BGR)
+    result_lab = target_lab.copy()
+    for i in range(1, 3):
+        adjusted_channel = (target_lab[:, :, i] - tar_means[i - 1]) * (src_stds[i - 1] / (tar_stds[i - 1] + 1e-6)) + \
+                           src_means[i - 1]
+        adjusted_channel = np.clip(adjusted_channel, 0, 255)
+        result_lab[:, :, i] = target_lab[:, :, i] * skin_lips_mask * skin_protection + \
+                              adjusted_channel * skin_lips_mask * (1 - skin_protection) + \
+                              adjusted_channel * (1 - skin_lips_mask)
+
+    result_bgr = cv2.cvtColor(result_lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
     result_bgr = cv2.GaussianBlur(result_bgr, (3, 3), 0)
     final_result = cv2.addWeighted(target, 1 - strength, result_bgr, strength, 0)
-
     brightness_difference = source_brightness - target_brightness
-    brightness_factor = 1.0
-    if brightness_difference < 0:
-        brightness_factor = 1.0 + brightness_difference / 255 * 0.3
-    elif brightness_difference > 0:
-        brightness_factor = 1.0 + brightness_difference / 255 * 0.3
-    brightness_factor = np.clip(brightness_factor, 0.7, 1.3)
+    brightness_factor = 1.0 + np.clip(brightness_difference / 255 * 0.4, -0.4, 0.4)
     final_result = adjust_brightness(final_result, brightness_factor)
 
     return final_result

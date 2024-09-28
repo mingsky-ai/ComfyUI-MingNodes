@@ -13,9 +13,9 @@ def image_stats(image):
 
 
 def is_skin(l, a, b):
-    return (l > 20) and (l < 220) and \
-           (a > 130) and (a < 170) and \
-           (b > 130) and (b < 180)
+    return (l > 20) and (l < 250) and \
+           (a > 120) and (a < 180) and \
+           (b > 120) and (b < 190)
 
 
 def tensor2cv2(image: torch.Tensor) -> np.array:
@@ -27,30 +27,31 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
 
 
 def color_transfer(source, target, strength=0.8, skin_protection=0.7):
-    source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB)
-    target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB)
+
+    source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
+    target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_l, target_a, target_b = cv2.split(target_lab)
     src_means, src_stds = image_stats(source_lab)
     tar_means, tar_stds = image_stats(target_lab)
-
-    skin_mask = np.apply_along_axis(lambda x: is_skin(*x), 2, target_lab).astype(np.float32)
+    skin_mask = np.apply_along_axis(lambda x: is_skin(*x), 2, target_lab.astype(np.uint8)).astype(np.float32)
     skin_mask = cv2.GaussianBlur(skin_mask, (5, 5), 0)
+    result_lab = np.zeros_like(target_lab)
+    result_lab[:, :, 0] = target_l
 
     for i, channel in enumerate([target_a, target_b]):
-        channel = channel.astype(np.float32)
-        adjusted_channel = (channel - tar_means[i]) * (src_stds[i] / tar_stds[i]) + src_means[i]
-        skin_adjusted = channel * skin_protection + adjusted_channel * (1 - skin_protection)
-        non_skin_adjusted = channel * (1 - strength) + adjusted_channel * strength
-        channel = skin_mask * skin_adjusted + (1 - skin_mask) * non_skin_adjusted
-        if i == 0:
-            target_a = np.clip(channel, 0, 255).astype(np.uint8)
-        else:
-            target_b = np.clip(channel, 0, 255).astype(np.uint8)
+        adjusted_channel = (channel - tar_means[i]) * (src_stds[i] / (tar_stds[i] + 1e-6)) * 0.75 + src_means[i]
+        adjusted_channel = np.clip(adjusted_channel, 0, 255)
+        result_channel = channel * (skin_mask * skin_protection) + \
+                         adjusted_channel * (skin_mask * (1 - skin_protection)) + \
+                         (channel * (1 - strength) + adjusted_channel * strength) * (1 - skin_mask)
 
-    target_l = cv2.addWeighted(target_l, 0.95, cv2.GaussianBlur(target_l, (5, 5), 0), 0.05, 0)
+        result_lab[:, :, i + 1] = result_channel
 
-    result_lab = cv2.merge([target_l, target_a, target_b])
+    result_lab = np.clip(result_lab, 0, 255).astype(np.uint8)
     result_bgr = cv2.cvtColor(result_lab, cv2.COLOR_LAB2BGR)
+    result_bgr = cv2.GaussianBlur(result_bgr, (3, 3), 0)
+    alpha = np.minimum(skin_mask * skin_protection, 0.5)
+    result_bgr = (alpha[:, :, np.newaxis] * target + (1 - alpha[:, :, np.newaxis]) * result_bgr).astype(np.uint8)
 
     return result_bgr
 

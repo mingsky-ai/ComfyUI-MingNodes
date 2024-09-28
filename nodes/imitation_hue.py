@@ -27,9 +27,9 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
 
 
 def color_transfer(source, target, strength=0.8, skin_protection=0.7):
-
     source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
+
     target_l, target_a, target_b = cv2.split(target_lab)
     src_means, src_stds = image_stats(source_lab)
     tar_means, tar_stds = image_stats(target_lab)
@@ -37,9 +37,8 @@ def color_transfer(source, target, strength=0.8, skin_protection=0.7):
     skin_mask = cv2.GaussianBlur(skin_mask, (5, 5), 0)
     result_lab = np.zeros_like(target_lab)
     result_lab[:, :, 0] = target_l
-
     for i, channel in enumerate([target_a, target_b]):
-        adjusted_channel = (channel - tar_means[i]) * (src_stds[i] / (tar_stds[i] + 1e-6)) * 0.75 + src_means[i]
+        adjusted_channel = (channel - tar_means[i]) * (src_stds[i] / (tar_stds[i] + 1e-6)) + src_means[i]
         adjusted_channel = np.clip(adjusted_channel, 0, 255)
         result_channel = channel * (skin_mask * skin_protection) + \
                          adjusted_channel * (skin_mask * (1 - skin_protection)) + \
@@ -50,8 +49,6 @@ def color_transfer(source, target, strength=0.8, skin_protection=0.7):
     result_lab = np.clip(result_lab, 0, 255).astype(np.uint8)
     result_bgr = cv2.cvtColor(result_lab, cv2.COLOR_LAB2BGR)
     result_bgr = cv2.GaussianBlur(result_bgr, (3, 3), 0)
-    alpha = np.minimum(skin_mask * skin_protection, 0.5)
-    result_bgr = (alpha[:, :, np.newaxis] * target + (1 - alpha[:, :, np.newaxis]) * result_bgr).astype(np.uint8)
 
     return result_bgr
 
@@ -63,7 +60,7 @@ class ImitationHueNode:
             "required": {
                 "imitation_image": ("IMAGE",),
                 "target_image": ("IMAGE",),
-                "strength": ("FLOAT", {"default": 1, "min": 0.1, "max": 1.0, "step": 0.1}),
+                "strength": ("FLOAT", {"default": 0.8, "min": 0.1, "max": 1.0, "step": 0.1}),
                 "skin_protection": ("FLOAT", {"default": 0.3, "min": 0.1, "max": 1.0, "step": 0.1}),
             }
         }

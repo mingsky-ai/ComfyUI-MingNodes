@@ -27,9 +27,9 @@ IC-Light's custom light source can define various shapes, position offsets (posi
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/light_source.png?raw=true)
 
-3: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，脸部保护参数值越大越接近原图，图片尺寸不宜过大，建议3K分辨率以下，不然比较慢。
+3: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，脸部保护参数值越大越接近原图。
 
-Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. The larger the face protection parameter value, the closer it is to the original image.The image size should not be too large, and the resolution is recommended to be below 3K, otherwise it will be slow.
+Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. The larger the face protection parameter value, the closer it is to the original image.
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/imitation1.png?raw=true)
 

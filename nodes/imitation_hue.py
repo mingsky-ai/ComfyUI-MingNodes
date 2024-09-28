@@ -26,7 +26,17 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
     return cv2.cvtColor(cv2image, cv2.COLOR_RGB2BGR)
 
 
+def adjust_brightness(image, factor):
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(hsv)
+    v = np.clip(v * factor, 0, 255).astype(np.uint8)
+    hsv = cv2.merge((h, s, v))
+    return cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+
+
 def color_transfer(source, target, strength=0.8, skin_protection=0.7):
+    source_brightness = np.mean(cv2.cvtColor(source, cv2.COLOR_BGR2GRAY))
+    target_brightness = np.mean(cv2.cvtColor(target, cv2.COLOR_BGR2GRAY))
     source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_l, target_a, target_b = cv2.split(target_lab)
@@ -50,6 +60,15 @@ def color_transfer(source, target, strength=0.8, skin_protection=0.7):
     result_bgr = cv2.GaussianBlur(result_bgr, (3, 3), 0)
     final_result = cv2.addWeighted(target, 1 - strength, result_bgr, strength, 0)
 
+    brightness_difference = source_brightness - target_brightness
+    brightness_factor = 1.0
+    if brightness_difference < 0:
+        brightness_factor = 1.0 + brightness_difference / 255 * 0.3
+    elif brightness_difference > 0:
+        brightness_factor = 1.0 + brightness_difference / 255 * 0.3
+    brightness_factor = np.clip(brightness_factor, 0.7, 1.3)
+    final_result = adjust_brightness(final_result, brightness_factor)
+
     return final_result
 
 
@@ -61,7 +80,7 @@ class ImitationHueNode:
                 "imitation_image": ("IMAGE",),
                 "target_image": ("IMAGE",),
                 "strength": ("FLOAT", {"default": 0.8, "min": 0.1, "max": 1.0, "step": 0.1}),
-                "skin_protection": ("FLOAT", {"default": 0.3, "min": 0.1, "max": 1.0, "step": 0.1}),
+                "skin_protection": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
             }
         }
 

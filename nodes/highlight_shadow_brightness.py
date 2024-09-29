@@ -85,9 +85,9 @@ class HighlightShadowBrightnessNode:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "highlight": ("INT", {"default": 0, "min": -100, "max": 100, "step": 1}),
-                "shadow": ("INT", {"default": 0, "min": -100, "max": 100, "step": 1}),
-                "brightness": ("INT", {"default": 0, "min": -100, "max": 100, "step": 1}),
+                "highlight": ("FLOAT", {"default": 0, "min": -10.0, "max": 10.0, "step": 0.1}),
+                "shadow": ("FLOAT", {"default": 0, "min": -10.0, "max": 10.0, "step": 0.1}),
+                "brightness": ("FLOAT", {"default": 0, "min": -10.0, "max": 10.0, "step": 0.1}),
             }
         }
 
@@ -100,6 +100,6 @@ class HighlightShadowBrightnessNode:
     def highlight_shadow_brightness(self, image, highlight, shadow, brightness):
         for img in image:
             rgb_image = Image.fromarray((img.squeeze().cpu().numpy() * 255).astype(np.uint8)).convert("RGB")
-        result_image = adjust_image(rgb_image, highlight, shadow, brightness)
+        result_image = adjust_image(rgb_image, highlight*10, shadow*10, brightness*10)
         rst = torch.from_numpy(result_image.astype(np.float32) / 255.0).unsqueeze(0)
         return (rst,)

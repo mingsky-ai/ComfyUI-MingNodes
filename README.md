@@ -4,9 +4,9 @@
 
 Some useful  functions developed, the specific workflow is in the workflow folder
 
-1: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，皮肤保护参数值皮肤色彩越大越接近原图色彩,支持区域色彩迁移，加入SAM语义分割制作蒙板即可。
+1: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，皮肤保护参数值皮肤色彩越大越接近原图色彩,支持区域色彩迁移，加入SAM语义分割制作蒙板即可。还有需要注意的是，如果是相机的原片jpg或png等图片，需要到PS里面转下格式才传入，因为相机的色彩空间可能不同。
 
-Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. The larger the face protection parameter value, the closer it is to the original image.Supports regional color migration, just add SAM semantic segmentation to create a mask
+Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. The larger the face protection parameter value, the closer it is to the original image.Supports regional color migration, just add SAM semantic segmentation to create a mask。It should also be noted that if it is a camera's original JPG or PNG image, it needs to be converted to PS format before being transmitted, as the color space of the camera may be different.
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/imitation1.png?raw=true)
 

@@ -69,7 +69,7 @@ def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_
         draw_tmp.polygon(points, fill=shape_color)
 
     elif shape == 'radial':
-        num_rays = 12  # 光芒数量
+        num_rays = 12
         for i in range(num_rays):
             angle = i * (360 / num_rays) * math.pi / 180
             x1 = tmp_center + max_dim / 4 * math.cos(angle)
@@ -78,10 +78,7 @@ def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_
             y2 = tmp_center + max_dim / 2 * math.sin(angle)
             draw_tmp.line([(x1, y1), (x2, y2)], fill=shape_color, width=int(max_dim / 20))
 
-    # 旋转图像
     img_tmp = img_tmp.rotate(rotation, resample=Image.BICUBIC, expand=True)
-
-    # 创建或使用基础图像
     if base_image is None:
         img = Image.new('RGBA', size, bg_color + (255,))
     else:
@@ -101,9 +98,7 @@ def draw_shape(shape, size=(200, 200), offset=(0, 0), scale=1.0, rotation=0, bg_
 
 
 def hex_to_rgb(hex_color):
-    # 去掉可能包含的#号
     hex_color = hex_color.lstrip('#')
-    # 将十六进制颜色转换为RGB格式
     r = int(hex_color[0:2], 16)
     g = int(hex_color[2:4], 16)
     b = int(hex_color[4:6], 16)

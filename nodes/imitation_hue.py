@@ -154,7 +154,7 @@ class ImitationHueNode:
                 "target_image": ("IMAGE",),
                 "strength": ("FLOAT", {"default": 1.0, "min": 0.1, "max": 1.0, "step": 0.1}),
                 "skin_protection": ("FLOAT", {"default": 0.2, "min": 0, "max": 1.0, "step": 0.1}),
-                "auto_brightness": ("BOOLEAN", {"default": False}),
+                "auto_brightness": ("BOOLEAN", {"default": True}),
                 "brightness_range": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
                 "auto_contrast": ("BOOLEAN", {"default": False}),
                 "contrast_range": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),

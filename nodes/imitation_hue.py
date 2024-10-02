@@ -43,7 +43,7 @@ def adjust_contrast(image, factor, mask=None):
     adjusted = image.astype(np.float32)
     if mask is not None:
         mask = mask.squeeze()
-        mask = np.repeat(mask[:, :, np.newaxis], 3, axis=2)  # 将 mask 扩展到 3 个通道
+        mask = np.repeat(mask[:, :, np.newaxis], 3, axis=2)
         adjusted = np.where(mask > 0, np.clip((adjusted - mean) * factor + mean, 0, 255), adjusted)
     else:
         adjusted = np.clip((adjusted - mean) * factor + mean, 0, 255)
@@ -58,7 +58,7 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
     return cv2.cvtColor(cv2image, cv2.COLOR_RGB2BGR)
 
 
-def color_transfer(source, target, mask, strength=0.8, skin_protection=0.7, auto_brightness=False, brightness_range=0.5, auto_contrast=False, contrast_range=0.5,
+def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2, auto_brightness=True, brightness_range=0.5, auto_contrast=False, contrast_range=0.5,
                    auto_saturation=False, saturation_range=0.5):
     source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
@@ -124,7 +124,7 @@ def color_transfer(source, target, mask, strength=0.8, skin_protection=0.7, auto
             target_brightness = np.mean(cv2.cvtColor(target, cv2.COLOR_BGR2GRAY))
             brightness_difference = source_brightness - target_brightness
             brightness_factor = 1.0 + np.clip(brightness_difference / 255 * brightness_range, brightness_range*-1, brightness_range)
-            final_result = adjust_brightness(final_result, brightness_factor, mask)
+            final_result = adjust_brightness(final_result, brightness_factor)
         if auto_contrast:
             source_gray = cv2.cvtColor(source, cv2.COLOR_BGR2GRAY)
             target_gray = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
@@ -132,7 +132,7 @@ def color_transfer(source, target, mask, strength=0.8, skin_protection=0.7, auto
             target_contrast = np.std(target_gray)
             contrast_difference = source_contrast - target_contrast
             contrast_factor = 1.0 + np.clip(contrast_difference / 255, contrast_range*-1, contrast_range)
-            final_result = adjust_contrast(final_result, contrast_factor, mask)
+            final_result = adjust_contrast(final_result, contrast_factor)
         if auto_saturation:
             source_hsv = cv2.cvtColor(source, cv2.COLOR_BGR2HSV)
             target_hsv = cv2.cvtColor(target, cv2.COLOR_BGR2HSV)
@@ -140,7 +140,7 @@ def color_transfer(source, target, mask, strength=0.8, skin_protection=0.7, auto
             target_saturation = np.mean(target_hsv[:, :, 1])
             saturation_difference = source_saturation - target_saturation
             saturation_factor = 1.0 + np.clip(saturation_difference / 255, saturation_range*-1, saturation_range)
-            final_result = adjust_saturation(final_result, saturation_factor, mask)
+            final_result = adjust_saturation(final_result, saturation_factor)
 
     return final_result
 

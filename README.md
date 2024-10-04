@@ -5,7 +5,7 @@
 Some useful  functions developed, the specific workflow is in the workflow folder
 
 1: 模仿像素蛋糕追色的功能，参数强度是色彩迁移的强度，皮肤保护参数值皮肤色彩越大越接近原图色彩,支持区域色彩迁移，加入SAM语义分割制作蒙板即可。
-可以打开是否调节自动亮度，对比度，和饱和度选项，各项值的参数就是自动调节的范围0.5就是50%范围内自动调节。 
+可以打开是否调节自动亮度，对比度，和饱和度选项，各项值的参数就是自动调节的范围0.5就是50%范围内自动调节。新增影调开关，可以模仿原图的影调。 
 还有需要注意的是，如果是相机的原片JPG或PNG等图片，需要到PS里面转下相应格式再传入，因为相机的色彩空间可能不同。
 
 Imitates the color tracking function of pixel cake. The parameter intensity is the intensity of color migration. 
@@ -13,6 +13,7 @@ The larger the face protection parameter value, the closer it is to the original
 Supports regional color migration, just add SAM semantic segmentation to create a mask。
 You can turn on the options to adjust the automatic brightness, contrast, and saturation. 
 The parameters for each value are within the automatic adjustment range of 0.5, which is 50% automatic adjustment.
+Added a tone switch that can mimic the tone of the original image.
 It should also be noted that if it is a camera's original JPG or PNG image, 
 it needs to be converted to PS format before being transmitted, as the color space of the camera may be different.
 

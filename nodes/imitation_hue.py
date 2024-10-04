@@ -50,6 +50,50 @@ def adjust_contrast(image, factor, mask=None):
     return adjusted.astype(np.uint8)
 
 
+def adjust_tone(source, target, tone_strength=0.7, mask=None):
+    h, w = target.shape[:2]
+    source = cv2.resize(source, (w, h))
+    lab_image = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
+    lab_source = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
+    l_image = lab_image[:,:,0]
+    l_source = lab_source[:,:,0]
+
+    if mask is not None:
+        mask = cv2.resize(mask, (w, h))
+        mask = mask.astype(np.float32) / 255.0
+        l_adjusted = np.copy(l_image)
+        mean_source = np.mean(l_source[mask > 0])
+        std_source = np.std(l_source[mask > 0])
+        mean_target = np.mean(l_image[mask > 0])
+        std_target = np.std(l_image[mask > 0])
+        l_adjusted[mask > 0] = (l_image[mask > 0] - mean_target) * (std_source / (std_target + 1e-6)) * 0.7 + mean_source
+        l_adjusted[mask > 0] = np.clip(l_adjusted[mask > 0], 0, 255)
+        clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8,8))
+        l_enhanced = clahe.apply(l_adjusted.astype(np.uint8))
+        l_final = cv2.addWeighted(l_adjusted, 0.7, l_enhanced.astype(np.float32), 0.3, 0)
+        l_final = np.clip(l_final, 0, 255)
+        l_contrast = cv2.addWeighted(l_final, 1.3, l_final, 0, -20)
+        l_contrast = np.clip(l_contrast, 0, 255)
+        l_image[mask > 0] = l_image[mask > 0] * (1 - tone_strength) + l_contrast[mask > 0] * tone_strength
+    else:
+        mean_source = np.mean(l_source)
+        std_source = np.std(l_source)
+        l_mean = np.mean(l_image)
+        l_std = np.std(l_image)
+        l_adjusted = (l_image - l_mean) * (std_source / (l_std + 1e-6)) * 0.7 + mean_source
+        l_adjusted = np.clip(l_adjusted, 0, 255)
+        clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8,8))
+        l_enhanced = clahe.apply(l_adjusted.astype(np.uint8))
+        l_final = cv2.addWeighted(l_adjusted, 0.7, l_enhanced.astype(np.float32), 0.3, 0)
+        l_final = np.clip(l_final, 0, 255)
+        l_contrast = cv2.addWeighted(l_final, 1.3, l_final, 0, -20)
+        l_contrast = np.clip(l_contrast, 0, 255)
+        l_image = l_image * (1 - tone_strength) + l_contrast * tone_strength
+
+    lab_image[:,:,0] = l_image
+    return cv2.cvtColor(lab_image.astype(np.uint8), cv2.COLOR_LAB2BGR)
+
+
 def tensor2cv2(image: torch.Tensor) -> np.array:
     if image.dim() == 4:
         image = image.squeeze()
@@ -58,8 +102,9 @@ def tensor2cv2(image: torch.Tensor) -> np.array:
     return cv2.cvtColor(cv2image, cv2.COLOR_RGB2BGR)
 
 
-def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2, auto_brightness=True, brightness_range=0.5, auto_contrast=False, contrast_range=0.5,
-                   auto_saturation=False, saturation_range=0.5):
+def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2, auto_brightness=True,
+                   brightness_range=0.5, auto_contrast=False, contrast_range=0.5,
+                   auto_saturation=False, saturation_range=0.5, auto_tone=False, tone_strength=0.7):
     source_lab = cv2.cvtColor(source, cv2.COLOR_BGR2LAB).astype(np.float32)
     target_lab = cv2.cvtColor(target, cv2.COLOR_BGR2LAB).astype(np.float32)
 
@@ -90,7 +135,6 @@ def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2,
                                   adjusted_channel * (1 - skin_lips_mask)
 
     result_bgr = cv2.cvtColor(result_lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
-    result_bgr = cv2.GaussianBlur(result_bgr, (3, 3), 0)
     final_result = cv2.addWeighted(target, 1 - strength, result_bgr, strength, 0)
 
     if mask is not None:
@@ -118,6 +162,8 @@ def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2,
             saturation_difference = source_saturation - target_saturation
             saturation_factor = 1.0 + np.clip(saturation_difference / 255, saturation_range*-1, saturation_range)
             final_result = adjust_saturation(final_result, saturation_factor, mask)
+        if auto_tone:
+            final_result = adjust_tone(source, final_result, tone_strength, mask)
     else:
         if auto_brightness:
             source_brightness = np.mean(cv2.cvtColor(source, cv2.COLOR_BGR2GRAY))
@@ -141,6 +187,8 @@ def color_transfer(source, target, mask=None, strength=1.0, skin_protection=0.2,
             saturation_difference = source_saturation - target_saturation
             saturation_factor = 1.0 + np.clip(saturation_difference / 255, saturation_range*-1, saturation_range)
             final_result = adjust_saturation(final_result, saturation_factor)
+        if auto_tone:
+            final_result = adjust_tone(source, final_result, tone_strength)
 
     return final_result
 
@@ -160,6 +208,8 @@ class ImitationHueNode:
                 "contrast_range": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
                 "auto_saturation": ("BOOLEAN", {"default": False}),
                 "saturation_range": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
+                "auto_tone": ("BOOLEAN", {"default": False}),
+                "tone_strength": ("FLOAT", {"default": 0.7, "min": 0.1, "max": 1.0, "step": 0.1}),
             },
             "optional": {
                 "mask": ("MASK", {"default": None}),
@@ -172,8 +222,9 @@ class ImitationHueNode:
     RETURN_NAMES = ("image",)
     FUNCTION = "imitation_hue"
 
-    def imitation_hue(self, imitation_image, target_image, strength, skin_protection, auto_brightness, brightness_range, auto_contrast, contrast_range,
-                      auto_saturation, saturation_range, mask=None):
+    def imitation_hue(self, imitation_image, target_image, strength, skin_protection, auto_brightness, brightness_range,
+                      auto_contrast, contrast_range, auto_saturation, saturation_range, auto_tone, tone_strength,
+                      mask=None):
         for img in imitation_image:
             img_cv1 = tensor2cv2(img)
 
@@ -186,8 +237,9 @@ class ImitationHueNode:
                 img_cv3 = img3.cpu().numpy()
                 img_cv3 = (img_cv3 * 255).astype(np.uint8)
 
-        result_img = color_transfer(img_cv1, img_cv2, img_cv3, strength, skin_protection, auto_brightness, brightness_range,
-                                    auto_contrast, contrast_range, auto_saturation, saturation_range)
+        result_img = color_transfer(img_cv1, img_cv2, img_cv3, strength, skin_protection, auto_brightness,
+                                    brightness_range,auto_contrast, contrast_range, auto_saturation,
+                                    saturation_range, auto_tone, tone_strength)
         result_img = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
         rst = torch.from_numpy(result_img.astype(np.float32) / 255.0).unsqueeze(0)
 

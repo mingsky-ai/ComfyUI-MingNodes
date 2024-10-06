@@ -209,7 +209,7 @@ class ImitationHueNode:
                 "auto_saturation": ("BOOLEAN", {"default": False}),
                 "saturation_range": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
                 "auto_tone": ("BOOLEAN", {"default": False}),
-                "tone_strength": ("FLOAT", {"default": 0.7, "min": 0.1, "max": 1.0, "step": 0.1}),
+                "tone_strength": ("FLOAT", {"default": 0.5, "min": 0.1, "max": 1.0, "step": 0.1}),
             },
             "optional": {
                 "mask": ("MASK", {"default": None}),

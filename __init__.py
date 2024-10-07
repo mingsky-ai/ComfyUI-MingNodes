@@ -5,6 +5,7 @@ from .nodes.add_watermark import AddWaterMarkNode
 from .nodes.imitation_hue import ImitationHueNode
 from .nodes.light_shape import LightShapeNode
 from .nodes.highlight_shadow_brightness import HighlightShadowBrightnessNode
+from .nodes.hsl_color import HSLColorNode
 
 NODE_CLASS_MAPPINGS = {
     "ConvertGrayChannelNode": ConvertGrayChannelNode,
@@ -14,6 +15,7 @@ NODE_CLASS_MAPPINGS = {
     "LightShapeNode": LightShapeNode,
     "ImitationHueNode": ImitationHueNode,
     "HighlightShadowBrightnessNode": HighlightShadowBrightnessNode,
+    "HSLColorNode": HSLColorNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -24,6 +26,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LightShapeNode": "IC-Light Light Shape",
     "ImitationHueNode": "Imitation Hue",
     "HighlightShadowBrightnessNode": "Highlight Shadow Brightness",
+    "HSLColorNode": "HSL Color",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

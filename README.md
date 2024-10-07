@@ -39,7 +39,11 @@ and transparency of the watermark. The text watermark can also customize the fon
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
 
-4：一个是百度翻译，可以中英繁之间的翻译，注意要填入百度的AppID和Appkey，可以到百度翻译申请，免费的。
+4: HSL调色
+
+![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/HSL_color.png?raw=true)
+
+5：一个是百度翻译，可以中英繁之间的翻译，注意要填入百度的AppID和Appkey，可以到百度翻译申请，免费的。
 
 Baidu Translate, which can translate between Chinese, English and Traditional Chinese. 
 Please note that you need to fill in Baidu's AppID and Appkey. You can apply for it at Baidu Translate, it is free.

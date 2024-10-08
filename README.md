@@ -36,16 +36,19 @@ and transparency of the watermark. The text watermark can also customize the fon
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
 
 4: HSL调色, 调整范围-30到30
+
 HSL color adjustment, adjustment range -30 to 30
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/HSL_color.png?raw=true)
 
 5: 色彩平衡，包含中间调，高光，阴影的调整，调整范围-100到100
+
 Color balance, including midtones, highlights, and shadows adjustments.Adjustment range: -100 to 100
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/color_balance.png?raw=true)
 
 6：阴影高光调节,调整范围-10到10
+
 Shadow highlight adjustment, adjustment range -10 to 10
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/highlight_shadow.png?raw=true)

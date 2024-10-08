@@ -6,6 +6,8 @@ from .nodes.imitation_hue import ImitationHueNode
 from .nodes.light_shape import LightShapeNode
 from .nodes.highlight_shadow_brightness import HighlightShadowBrightnessNode
 from .nodes.hsl_color import HSLColorNode
+from .nodes.color_balance import ColorBalanceNode
+
 
 NODE_CLASS_MAPPINGS = {
     "ConvertGrayChannelNode": ConvertGrayChannelNode,
@@ -16,6 +18,7 @@ NODE_CLASS_MAPPINGS = {
     "ImitationHueNode": ImitationHueNode,
     "HighlightShadowBrightnessNode": HighlightShadowBrightnessNode,
     "HSLColorNode": HSLColorNode,
+    "ColorBalanceNode": ColorBalanceNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -27,6 +30,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImitationHueNode": "Imitation Hue",
     "HighlightShadowBrightnessNode": "Highlight Shadow Brightness",
     "HSLColorNode": "HSL Color",
+    "ColorBalanceNode": "Color Balance",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

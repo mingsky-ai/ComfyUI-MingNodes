@@ -7,7 +7,7 @@ from .nodes.light_shape import LightShapeNode
 from .nodes.highlight_shadow_brightness import HighlightShadowBrightnessNode
 from .nodes.hsl_color import HSLColorNode
 from .nodes.color_balance import ColorBalanceNode
-
+from .nodes.remove_watermark import RemoveWatermarkNode
 
 NODE_CLASS_MAPPINGS = {
     "ConvertGrayChannelNode": ConvertGrayChannelNode,
@@ -19,6 +19,7 @@ NODE_CLASS_MAPPINGS = {
     "HighlightShadowBrightnessNode": HighlightShadowBrightnessNode,
     "HSLColorNode": HSLColorNode,
     "ColorBalanceNode": ColorBalanceNode,
+    "RemoveWatermarkNode": RemoveWatermarkNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -31,6 +32,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "HighlightShadowBrightnessNode": "Highlight Shadow Brightness",
     "HSLColorNode": "HSL Color",
     "ColorBalanceNode": "Color Balance",
+    "RemoveWatermarkNode": "AI Remove Watermark",
 }
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]

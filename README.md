@@ -35,25 +35,32 @@ and transparency of the watermark. The text watermark can also customize the fon
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
 
-4: HSL调色, 调整范围-30到30
+4: AI去水印功能，基于开源的lama模型开发，在水印地方涂抹上蒙板即可去水印
+   模型下载地址：[模型下载]:(https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) 下载模型放到models/ming文件夹
+AI watermark removal function, developed based on the open source lama model, can remove the watermark by applying a mask to the watermark area.
+Model download address: [model download]:(https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) Download the model and put it in the models/ming folder
+
+![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/remove_watermark.png?raw=true)
+
+5: HSL调色, 调整范围-30到30
 
 HSL color adjustment, adjustment range -30 to 30
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/HSL_color.png?raw=true)
 
-5: 色彩平衡，包含中间调，高光，阴影的调整，调整范围-100到100
+6: 色彩平衡，包含中间调，高光，阴影的调整，调整范围-100到100
 
 Color balance, including midtones, highlights, and shadows adjustments.Adjustment range: -100 to 100
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/color_balance.png?raw=true)
 
-6：阴影高光调节,调整范围-10到10
+7：阴影高光调节,调整范围-10到10
 
 Shadow highlight adjustment, adjustment range -10 to 10
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/highlight_shadow.png?raw=true)
 
-7：一个是百度翻译，可以中英繁之间的翻译，注意要填入百度的AppID和Appkey，可以到百度翻译申请，免费的。
+8：一个是百度翻译，可以中英繁之间的翻译，注意要填入百度的AppID和Appkey，可以到百度翻译申请，免费的。
 
 Baidu Translate, which can translate between Chinese, English and Traditional Chinese. 
 Please note that you need to fill in Baidu's AppID and Appkey. You can apply for it at Baidu Translate, it is free.

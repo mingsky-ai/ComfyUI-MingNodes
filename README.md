@@ -36,9 +36,12 @@ and transparency of the watermark. The text watermark can also customize the fon
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/watermark.png?raw=true)
 
 4: AI去水印功能，基于开源的lama模型开发，在水印地方涂抹上蒙板即可去水印
-   模型下载地址：[模型下载]:(https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) 下载模型放到models/ming文件夹
+
+模型下载地址：[模型下载](https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) 下载模型放到models/ming文件夹
+
 AI watermark removal function, developed based on the open source lama model, can remove the watermark by applying a mask to the watermark area.
-Model download address: [model download]:(https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) Download the model and put it in the models/ming folder
+
+Model download address: [model download](https://huggingface.co/anyisalin/big-lama/resolve/main/big-lama.safetensors) download the model and put it in the models/ming folder
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/remove_watermark.png?raw=true)
 

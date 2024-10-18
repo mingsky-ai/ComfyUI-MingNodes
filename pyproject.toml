@@ -1,6 +1,6 @@
 [project]
 name = "ComfyUI-MingNodes"
-description = "Nodes: imitation hue,IC-light light shape, watermark, HSL color, color balance, brightness contrast saturation, highlight shadow brightness, gray channel, baidu translate"
+description = "Nodes: imitation hue,IC-light light shape, watermark, AI remove watermark, HSL color, color balance, brightness contrast saturation, highlight shadow brightness, gray channel, baidu translate"
 version = "1.0"
 license = { file = "LICENSE" }
 

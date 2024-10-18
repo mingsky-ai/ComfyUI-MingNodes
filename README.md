@@ -74,6 +74,10 @@ Please note that you need to fill in Baidu's AppID and Appkey. You can apply for
 
 ![Image text](https://github.com/mingsky-ai/ComfyUI-MingNodes/blob/main/images/baidu_translate.png?raw=true)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mingsky-ai/ComfyUI-MingNodes&type=Date)](https://star-history.com/#mingsky-ai/ComfyUI-MingNodes&Date)
+
 
 
 
